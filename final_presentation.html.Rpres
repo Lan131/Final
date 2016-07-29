@@ -52,6 +52,12 @@ cauchy=function(x)
 
 ```
 
+
+```{r,echo=FALSE}
+par(mfrow = c(1, 2))
+```
+
+
 Results
 ========================================================
 ```{r}
@@ -297,3 +303,4 @@ for(i in 4:4)
 Limitations and results
 =============================================================
 The project here only deals with the Cauchy distribution with Normal sampler. It is not a rigorous treatment of the topic so any conclusions are specific and not general.The choice of variance in the sampler function is highly important. If the variance is quite large then the acceptance rate is low so the algorithm converges slowly. On the other hand if it is too small, the the algorithm moves slowly throughout the sample space and converges slowly. The solution to this problem, which is outside of the scope of this project, is to specify a loss function (perhaps evidence from target distribution), and find the optimal variance the minimizes this loss function with optimization techniques like stochastic gradient descent or adaptive learning rates. A rigorous treatment of the latter can be found by Haario, Heikki; Saksman, Eero; Tamminen, Johanna. An adaptive Metropolis algorithm. Bernoulli 7 (2001), no. 2, 223--242.
+
