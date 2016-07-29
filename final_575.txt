@@ -30,7 +30,7 @@ U < (f(Y )g(Xt|Y ))/(f(Xt)g(Y |Xt))
 accept Y and set Xt+1 = Y ; otherwise set Xt+1 = Xt.
 9
 d. Increment t.
-• Note in step (3c) the candidate point Y is accepted with probability
+â€¢ Note in step (3c) the candidate point Y is accepted with probability
 alpha(Xt, Y ) = min(1,(f(Y )g(Xt|Y ))/(f(Xt)g(Y |Xt)))
 
 Note since g is symmetric:
@@ -124,7 +124,7 @@ acf(TS, lag.max = NULL,type = c("correlation"),plot = TRUE)
 
 
 
-####Run Metropolis Algorithm using t distibution Proposal
+###Run Metropolis Algorithm using t distibution Proposal
 ```{r}
 
 x[1]=rnorm(1,0,2)# initialize the chain from the stationary
@@ -145,7 +145,7 @@ qplot(9500:10000,x[9500:10000],xlab="Index",ylab="Value")
 hist(x, col="grey")
 
 # draw a density line plot
-plot(density(x), bty="l",main="95% density with Normal Proposal")
+plot(density(x), bty="l",main="95% density with t(20) Proposal")
 
 
 
@@ -193,7 +193,7 @@ acf(TS, lag.max = NULL,type = c("correlation"),plot = TRUE)
 ```
 
 
-#####The issue appears to be that the data is extremely correlated. So that an extreme value on the tail would cause the Algorithm to continutally sample from that area until some large burn in time.
+#####The issue appears to be that the data is extremely correlated. This means iid samples cannot be taken from this data and the series is not a Markov chain.
 
 
 ```{r}
@@ -269,7 +269,7 @@ for(i in 1:4)
 
 ```
 
-#####With a small varience in the proposal function means that the density of the data is slowly converging to the Cauchy distribution.
+#####With a small varience in the proposal function means that the density of the data is slowly converging to the Cauchy distribution.The autocorrelation is also high.
 
 
 ###How does the number of simulated runs effect the Metropolis Algorithm with larger varience?
@@ -284,9 +284,10 @@ for(i in 1:4)
 
 ```
 
-#####With a large variance as the number of simulations increase  the autocorrelation converges.
+#####With a large variance as the number of simulations increases  the autocorrelation is less variable.
 
-
+####Conclusions
+The variance of the sampler is inversely related to the auto correlation and directly related to the count of rejected points. With a small variance in the sampler function the series is has high auto correlation but large acceptance rates. This means it can visit the entire sample space in a short amount of runs. With a large variance in the sampler function the series is has low auto correlation but low acceptance rates. This means it takes many runs to sample from the whole sample space.
 
 #### Limitations and results
-The project here only deals with the Cauchy distribution with Normal sampler. It is not a rigorous treatment of the topic so any conclusions are specific and not general.The choice of variance in the sampler function is highly important. If the variance is quite large then the acceptance rate is low so the algorithm converges slowly. On the other hand if it is too small, the the algorithm moves slowly throughout the sample space and converges slowly. The solution to this problem, which is outside of the scope of this project, is to specify a loss function (perhaps deviance from target distribution), and find the optimal variance the minimizes this loss function with optimization techniques like stochastic gradient descent or adaptive learning rates. A rigorous treatment of the latter can be found by Haario, Heikki; Saksman, Eero; Tamminen, Johanna. An adaptive Metropolis algorithm. Bernoulli 7 (2001), no. 2, 223--242.
+The project here only deals with the Cauchy distribution with a Normal (and near normal) sampler. It is not a rigorous treatment of the topic so any conclusions are specific and not general.The choice of variance in the sampler function is highly important. If the variance is quite large then the acceptance rate is low so the algorithm converges slowly. On the other hand if it is too small, the the algorithm moves slowly throughout the sample space and converges slowly. The solution to this problem, which is outside of the scope of this project, is to specify a loss function (perhaps deviance from target distribution), and find the optimal variance the minimizes this loss function with optimization techniques like stochastic gradient descent or adaptive learning rates. A rigorous treatment of the latter can be found by Haario, Heikki; Saksman, Eero; Tamminen, Johanna. An adaptive Metropolis algorithm. Bernoulli 7 (2001), no. 2, 223--242.
